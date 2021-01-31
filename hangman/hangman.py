@@ -16,10 +16,12 @@ class Hangman():
         pass
 
 def main():
-    hangman = Hangman()
+    game = Hangman(file.ReadFile())
+    game.status()
+    if game.gamewon():
+        print("\nCongratulations! You won!")
+    else:
+        print("\nGame over!")
 
-word = file.ReadFile()
-print(word)
-b = board.Board()
-print(b[0])
-print(b.len())
+if __name__ == "__main__":
+    main()
