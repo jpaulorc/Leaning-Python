@@ -39,7 +39,7 @@ def main():
     # Enquanto o jogo não tiver terminado, print do status, solicita uma letra e faz a leitura do caracter
     game_board = board.Board()
     for i in range(game_board.len()):
-        game.clear()
+        #game.clear()
         print(game_board[i])
     else:
         print("teste")
