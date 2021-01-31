@@ -1,4 +1,5 @@
 import file
+import board
 
 class Hangman():
     def __init__(self, word):
@@ -14,68 +15,11 @@ class Hangman():
     def status(self):
         pass
 
-def main()
-    
+def main():
+    hangman = Hangman()
+
 word = file.ReadFile()
 print(word)
-
-board = [
-'''
-  +---+
-      |
-      |
-      |
-      |
-      | 
-============= ''',
-'''
-  +---+
-  0   |
-      |
-      |
-      |
-      | 
-============= ''',
-'''
-  +---+
-  0   |
-  |   |
-      |
-      |
-      | 
-============= ''',
-'''
-  +---+
-  0   |
- /|   |
-      |
-      |
-      | 
-============= ''',
-'''
-  +---+
-  0   |
- /|\  |
-      |
-      |
-      | 
-============= ''',
-'''
-  +---+
-  0   |
- /|\  |
- /    |
-      |
-      | 
-============= ''',
-'''
-  +---+
-  0   |
- /|\  |
- / \  |
-      |
-      | 
-============= ''']
-
-for i in board:
-    print(i)
+b = board.Board()
+print(b[0])
+print(b.len())
