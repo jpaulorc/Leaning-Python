@@ -55,7 +55,6 @@ class Hangman():
 def main():
     game = Hangman(readfile.ReadFile().getword())
     game_board = board.Board()
-    game.clear()
     
     while not game.game_over():
         game.game_status(game_board)
