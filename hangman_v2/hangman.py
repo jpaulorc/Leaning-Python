@@ -1,4 +1,4 @@
-import file
+import readfile
 import board
 import os
 
@@ -7,81 +7,67 @@ class Hangman():
         self.__word = word
         self.__right_letter = []
         self.__wrong_letter = []
-        self.__hide_word = []
-        self.__move = 0
-    
-    def gethideword(self):
-        self.__hide_word = ['_' for i in self.__word]
-        return ' '.join(self.__hide_word)
 
-    def getrightandwrongletters(self):
-        return self.__right_letter, self.__wrong_letter
+    def get_word(self):
+        return self.__word
 
     def guess(self, letter):
-        if letter in self.__word:
+        if letter in self.__word and letter not in self.__right_letter:
             self.__right_letter.append(letter) 
-            return 0
-        else:
+        elif letter not in self.__word and letter not in self.__wrong_letter:
             self.__wrong_letter.append(letter)
-            return 1
+        else:
+            return False
+        return True
 
-    def gameover(self, move, board):
-        if (move + 1 == board.len()) and (self.__word != ''.join(self.__hide_word)):
+    def game_over(self):
+        return self.game_won() or len(self.__wrong_letter) == 6
+
+    def game_won(self):
+        if '_' not in self.hide_word():
             return True
         return False
+    
+    def hide_word(self):
+        result = ''
+        for letter in self.__word:
+            if letter not in self.__right_letter:
+                result += '_ '
+            else:
+                result += letter
+        return result
 
-    def gamewon(self):
-        if self.__word == ''.join(self.__hide_word):
-            return True
-        return False
-
-    def hide_word(self, letter):
-        for i in range(len(self.__word)):
-            if self.__word[i] == letter:
-                self.__hide_word[i] = letter
-        
-        return ' '.join(self.__hide_word)
+    def game_status(self, board):
+        self.clear()
+        print(board[len(self.__wrong_letter)])
+        print("\nWord: " + self.hide_word())
+        print("\nWrong words:")
+        for i in self.__wrong_letter:
+            print(i)
+        print("\nRigth words:")
+        for i in self.__right_letter:
+            print(i)
 
     def clear(self):
         os.system('cls' if os.name == 'nt' else 'clear')
         print(">>>>>>>>>>>>>>>Hangman<<<<<<<<<<<<<<<")
 
 def main():
-    game = Hangman(file.ReadFile().getword())
+    game = Hangman(readfile.ReadFile().getword())
+    game_board = board.Board()
     game.clear()
     
-    game_board = board.Board()
-    hide_word = game.gethideword()
-    right_letter, wrong_letter = [], []
-
-    move = 0
-    while True:
-        game.clear()
-        print(game_board[move])
-        print('Word: ' + hide_word)
-        
-        print("\nRight Letters:")
-        print_letters(right_letter)
-
-        print("\nWrong Letters:")
-        print_letters(wrong_letter)
-        
-        if game.gamewon():
-            print("\nCongratulations! You won!")
-            break
-        if game.gameover(move, game_board):
-            print("\nGame over!")
-            break
-
+    while not game.game_over():
+        game.game_status(game_board)
         letter = input("\nInput a letter: ")
-        hide_word = game.hide_word(letter)
-        move += game.guess(letter)
-        right_letter, wrong_letter = game.getrightandwrongletters()
+        game.guess(letter)
 
-def print_letters(letters):
-    if len(letters) > 0:
-        for i in letters:
-            print(i)
+    game.game_status(game_board)
+
+    if game.game_won():
+        print("\nCongratulations! You won!")
+    else:
+        print("Game over! The right word is " + game.get_word())
 
 if __name__ == "__main__":
     main()
