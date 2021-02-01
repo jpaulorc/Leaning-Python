@@ -5,5 +5,5 @@ class ReadFile():
     with open('words.txt', 'rt') as file:
       self.__words = file.readlines()
   
-  def __str__(self):
+  def getword(self):
     return self.__words[randint(0, len(self.__words))].strip()

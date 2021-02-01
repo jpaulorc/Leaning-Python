@@ -4,54 +4,84 @@ import os
 
 class Hangman():
     def __init__(self, word):
-        print(">>>>>>>>>>>>>>>Hangman<<<<<<<<<<<<<<<")
-        self__word = word
+        self.__word = word
+        self.__right_letter = []
+        self.__wrong_letter = []
+        self.__hide_word = []
+        self.__move = 0
     
-    # Método para adivinhar a letra
+    def gethideword(self):
+        self.__hide_word = ['_' for i in self.__word]
+        return ' '.join(self.__hide_word)
+
+    def getrightandwrongletters(self):
+        return self.__right_letter, self.__wrong_letter
+
     def guess(self, letter):
-        letter = input("Input a letter: ")
-        if letter in self__word:
+        if letter in self.__word:
+            self.__right_letter.append(letter) 
+            return 0
+        else:
+            self.__wrong_letter.append(letter)
+            return 1
+
+    def gameover(self, move, board):
+        if (move + 1 == board.len()) and (self.__word != ''.join(self.__hide_word)):
             return True
         return False
 
-    # Método para verificar se o jogo terminou
-    def gameover(self):
-        pass
-
-    # Método para verificar se o jogador venceu
     def gamewon(self):
-        pass
+        if self.__word == ''.join(self.__hide_word):
+            return True
+        return False
 
-    # Método para não mostrar a letra no board
-    def hide_word(self):
-        pass
-
-    # Método para checar o status do game e imprimir o board na tela
-    def status(self):
-        pass
+    def hide_word(self, letter):
+        for i in range(len(self.__word)):
+            if self.__word[i] == letter:
+                self.__hide_word[i] = letter
+        
+        return ' '.join(self.__hide_word)
 
     def clear(self):
         os.system('cls' if os.name == 'nt' else 'clear')
+        print(">>>>>>>>>>>>>>>Hangman<<<<<<<<<<<<<<<")
 
 def main():
-    game = Hangman(file.ReadFile())
-
-    # Enquanto o jogo não tiver terminado, print do status, solicita uma letra e faz a leitura do caracter
+    game = Hangman(file.ReadFile().getword())
+    game.clear()
+    
     game_board = board.Board()
-    for i in range(game_board.len()):
-        #game.clear()
-        print(game_board[i])
-    else:
-        print("teste")
+    hide_word = game.gethideword()
+    right_letter, wrong_letter = [], []
 
-	# Verifica o status do jogo
-    game.status()
+    move = 0
+    while True:
+        game.clear()
+        print(game_board[move])
+        print('Word: ' + hide_word)
+        
+        print("\nRight Letters:")
+        print_letters(right_letter)
 
-    # De acordo com o status, imprime mensagem na tela para o usuário
-    if game.gamewon():
-        print("\nCongratulations! You won!")
-    else:
-        print("\nGame over!")
+        print("\nWrong Letters:")
+        print_letters(wrong_letter)
+        
+        if game.gamewon():
+            print("\nCongratulations! You won!")
+            break
+        if game.gameover(move, game_board):
+            print("\nGame over!")
+            break
+
+        letter = input("\nInput a letter: ")
+        hide_word = game.hide_word(letter)
+        move += game.guess(letter)
+        right_letter, wrong_letter = game.getrightandwrongletters()
+
+def print_letters(letters):
+    if len(letters) > 0:
+        for i in letters:
+            print(i)
 
 if __name__ == "__main__":
     main()
