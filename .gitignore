@@ -2,3 +2,4 @@
 *.csv
 files/
 __pycache__
+*.db
