@@ -1,3 +1,3 @@
 # Learning-Python
 
-Repository used to save my notebooks and py files.
+Notebooks and py files used to learn Python.
